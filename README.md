@@ -1,6 +1,6 @@
 # What is this?
 
-This is a simple experiment to show how to make a simple roguelike interface. There's not much to it.
+This is a simple experiment to show how to make a simple roguelike interface using Rust and Web Assembly. There's not much to it.
 
 https://richardanaya.github.io/rust-roguelike/index.html
 
