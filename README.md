@@ -14,5 +14,5 @@ Feel free to leave an issue if you see a more idiomatic way of doing something.
 curl -s https://static.rust-lang.org/rustup.sh | sh -s -- --channel=nightly
 rustup update nightly
 rustup target add wasm32-unknown-unknown --toolchain=nightly
-rustc +nightly --target wasm32-unknown-unknown -O --crate-type=cdylib roguelike.rs -o roguelike.wasm
+make
 ```
