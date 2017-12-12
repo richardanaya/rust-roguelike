@@ -19,13 +19,13 @@ document.body.append(c);
 
 var ctx = c.getContext('2d');
 ctx.textAlign = "center";
+ctx.font = '12px arial';
 
 fetch('roguelike.wasm')
 .then(response => response.arrayBuffer())
 .then(bytes => WebAssembly.instantiate(bytes, {
   env: {
    put_character: function(x,y,char,r,g,b) {
-     ctx.font = '12px arial';
      ctx.fillStyle = `rgb(${r},${g},${b})`;
      ctx.clearRect(x*squareSize, y*squareSize, squareSize,squareSize);
      ctx.fillText(String.fromCharCode(char), x*squareSize+squareSize/2, y*squareSize+squareSize/2);
