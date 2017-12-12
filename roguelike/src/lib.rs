@@ -14,8 +14,8 @@ const KEY_RIGHT: i32 = 39;
 const KEY_DOWN: i32 = 40;
 
 struct World {
-    width: i32,
-    height: i32,
+    view_width: i32,
+    view_height: i32,
     player_position:(i32,i32)
 }
 
@@ -24,9 +24,9 @@ struct World {
 lazy_static! {
     static ref WORLD: Mutex<World> = Mutex::new(
         World {
-            width: 0,
-            height: 0,
-            player_position : (5,5)
+            view_width: 0,
+            view_height: 0,
+            player_position : (1,1)
         }
     );
 }
@@ -38,13 +38,10 @@ fn draw_character(x: i32,y: i32, char: u8,r: u8,g: u8,b: u8) -> () {
     }
 }
 
-fn draw_world(){
-    //get reference to world data
-    let world = &WORLD.lock().unwrap();
-
+fn draw_world(world:&World){
     //draw grass
-    for y in 0..world.height {
-        for x in 0..world.width {
+    for y in 0..world.view_height {
+        for x in 0..world.view_width {
           draw_character(x,y,46,0,255,0);
         }
     }
@@ -55,17 +52,24 @@ fn draw_world(){
 
 #[no_mangle]
 pub fn start(width: i32, height: i32) -> () {
+    //get the world, this gets unlocked on deallocation
     let world = &mut WORLD.lock().unwrap();
-    world.width = width;
-    world.height = height;
-    draw_world();
+    world.view_width = width;
+    world.view_height = height;
+    draw_world(world);
 }
 
 #[no_mangle]
 pub fn key_down(c: i32) -> () {
+    //get the world, this gets unlocked on deallocation
     let world = &mut WORLD.lock().unwrap();
-    if(c == KEY_LEFT){
-        world.player_position = (world.player_position.0-1,world.player_position.1);
-    }
-    draw_world();
+    let modifier = match c {
+        KEY_LEFT => (-1,0),
+        KEY_RIGHT => (1,0),
+        KEY_DOWN => (0,1),
+        KEY_UP => (0,-1),
+        _ => (0,0)
+    };
+    world.player_position = (world.player_position.0+modifier.0,world.player_position.1+modifier.1);
+    draw_world(world);
 }
