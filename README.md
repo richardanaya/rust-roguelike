@@ -4,7 +4,7 @@ This is a simple experiment to show how to make a simple roguelike interface usi
 
 https://richardanaya.github.io/rust-roguelike/index.html
 
-Interesting detail: Rust doesn't allow mutable static globals. So you have to create a global mutex that holds a mutable value. That way all your library entrypoint functions sharing that global data are thread safe. Turns out there is a cargo package lazy_static that makes this easy.
+Interesting detail: Safe Rust doesn't allow mutable static globals. So you have to create a global mutex that holds a mutable value. That way all your library entrypoint functions sharing that global data are thread safe. Turns out there is a cargo package lazy_static that makes this easy.
 
 Feel free to leave an issue if you see a more idiomatic way of doing something.
 
