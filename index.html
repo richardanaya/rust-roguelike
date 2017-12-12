@@ -1,0 +1,42 @@
+<style>
+body {
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>
+<body>
+</body>
+<script>
+var width = 80;
+var height = 60;
+var squareSize = 10;
+var c = document.createElement('canvas');
+c.width = width*squareSize;
+c.height = height*squareSize;
+document.body.append(c);
+
+var ctx = c.getContext('2d');
+ctx.textAlign = "center";
+
+fetch('roguelike.wasm')
+.then(response => response.arrayBuffer())
+.then(bytes => WebAssembly.instantiate(bytes, {
+  env: {
+   put_character: function(x,y,char,r,g,b) {
+     ctx.font = '12px arial';
+     ctx.fillStyle = `rgb(${r},${g},${b})`;
+     ctx.clearRect(x*squareSize, y*squareSize, squareSize,squareSize);
+     ctx.fillText(String.fromCharCode(char), x*squareSize+squareSize/2, y*squareSize+squareSize/2);
+   }
+ }
+}))
+.then(results => {
+    results.instance.exports.start(width,height);
+    document.body.addEventListener("keydown",function(e){
+      console.log("Key Pressed:"+e.keyCode);
+      results.instance.exports.key_down(e.keyCode);
+    })
+});
+</script>
